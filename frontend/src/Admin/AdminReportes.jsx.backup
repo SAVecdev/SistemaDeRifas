@@ -1,0 +1,1082 @@
+import { useState, useEffect } from 'react';
+import apiClient from '../utils/axios';
+import './AdminReportes.css';
+
+export default function AdminReportes() {
+  // Estados para filtros de fecha
+  const hoy = new Date().toISOString().split('T')[0];
+  const primerDiaMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+  
+  const [fechaInicio, setFechaInicio] = useState(primerDiaMes);
+  const [fechaFin, setFechaFin] = useState(hoy);
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('resumen');
+
+  // Estados para datos
+  const [resumen, setResumen] = useState(null);
+  const [ventas, setVentas] = useState([]);
+  const [vendedores, setVendedores] = useState([]);
+  const [rifas, setRifas] = useState([]);
+  const [clientes, setClientes] = useState([]);
+  const [numeros, setNumeros] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [ganadores, setGanadores] = useState([]);
+  const [cancelaciones, setCancelaciones] = useState([]);
+  const [premiosPorDia, setPremiosPorDia] = useState([]);
+  const [premiosNoPagados, setPremiosNoPagados] = useState([]);
+  const [ventasPremiosVendedorDia, setVentasPremiosVendedorDia] = useState([]);
+  const [consolidadoMensual, setConsolidadoMensual] = useState([]);
+  const [premiosPorVendedor, setPremiosPorVendedor] = useState([]);
+
+  useEffect(() => {
+    cargarDatosActivos();
+  }, [fechaInicio, fechaFin, activeTab]);
+
+  const cargarDatosActivos = async () => {
+    setLoading(true);
+    try {
+      switch (activeTab) {
+        case 'resumen':
+          await cargarResumen();
+          break;
+        case 'ventas':
+          await cargarVentas();
+          break;
+        case 'vendedores':
+          await cargarVendedores();
+          break;
+        case 'rifas':
+          await cargarRifas();
+          break;
+        case 'clientes':
+          await cargarClientes();
+          break;
+        case 'numeros':
+          await cargarNumeros();
+          break;
+        case 'areas':
+          await cargarAreas();
+          break;
+        case 'ganadores':
+          await cargarGanadores();
+          break;
+        case 'cancelaciones':
+          await cargarCancelaciones();
+          break;
+        case 'premios-dia':
+          await cargarPremiosPorDia();
+          break;
+        case 'premios-pendientes':
+          await cargarPremiosNoPagados();
+          break;
+        case 'ventas-premios-vendedor':
+          await cargarVentasPremiosVendedorDia();
+          break;
+        case 'consolidado-mensual':
+          await cargarConsolidadoMensual();
+          break;
+        case 'premios-vendedor':
+          await cargarPremiosPorVendedor();
+          break;
+      }
+    } catch (error) {
+      console.error('Error cargando datos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cargarResumen = async () => {
+    const resp = await apiClient.get(`/reportes/resumen?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setResumen(resp.data.data);
+  };
+
+  const cargarVentas = async () => {
+    const resp = await apiClient.get(`/reportes/ventas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setVentas(resp.data.data);
+  };
+
+  const cargarVendedores = async () => {
+    const resp = await apiClient.get(`/reportes/vendedores?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setVendedores(resp.data.data);
+  };
+
+  const cargarRifas = async () => {
+    const resp = await apiClient.get(`/reportes/rifas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setRifas(resp.data.data);
+  };
+
+  const cargarClientes = async () => {
+    const resp = await apiClient.get(`/reportes/clientes`);
+    setClientes(resp.data.data);
+  };
+
+  const cargarNumeros = async () => {
+    const resp = await apiClient.get(`/reportes/numeros-populares?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&limite=100`);
+    setNumeros(resp.data.data);
+  };
+
+  const cargarAreas = async () => {
+    const resp = await apiClient.get(`/reportes/areas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setAreas(resp.data.data);
+  };
+
+  const cargarGanadores = async () => {
+    const resp = await apiClient.get(`/reportes/ganadores?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setGanadores(resp.data.data);
+  };
+
+  const cargarCancelaciones = async () => {
+    const resp = await apiClient.get(`/reportes/cancelaciones?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setCancelaciones(resp.data.data);
+  };
+
+  const cargarPremiosPorDia = async () => {
+    const resp = await apiClient.get(`/reportes/premios-por-dia?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setPremiosPorDia(resp.data.data);
+  };
+
+  const cargarPremiosNoPagados = async () => {
+    const resp = await apiClient.get(`/reportes/premios-no-pagados?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setPremiosNoPagados(resp.data.data);
+  };
+
+  const cargarVentasPremiosVendedorDia = async () => {
+    const resp = await apiClient.get(`/reportes/ventas-premios-vendedor-dia?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setVentasPremiosVendedorDia(resp.data.data);
+  };
+
+  const cargarConsolidadoMensual = async () => {
+    const resp = await apiClient.get(`/reportes/consolidado-mensual?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setConsolidadoMensual(resp.data.data);
+  };
+
+  const cargarPremiosPorVendedor = async () => {
+    const resp = await apiClient.get(`/reportes/premios-por-vendedor?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+    setPremiosPorVendedor(resp.data.data);
+  };
+
+  const formatFecha = (fecha) => {
+    if (!fecha) return '-';
+    return new Date(fecha).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+  };
+
+  const formatMonto = (monto) => {
+    return `$${Number(monto || 0).toFixed(2)}`;
+  };
+
+  const setRangoRapido = (dias) => {
+    const fin = new Date();
+    const inicio = new Date();
+    inicio.setDate(inicio.getDate() - dias);
+    setFechaInicio(inicio.toISOString().split('T')[0]);
+    setFechaFin(fin.toISOString().split('T')[0]);
+  };
+
+  const exportarCSV = (datos, nombreArchivo) => {
+    if (!datos || datos.length === 0) {
+      alert('No hay datos para exportar');
+      return;
+    }
+
+    const headers = Object.keys(datos[0]).join(',');
+    const rows = datos.map(row => 
+      Object.values(row).map(val => 
+        typeof val === 'string' && val.includes(',') ? `"${val}"` : val
+      ).join(',')
+    );
+    
+    const csv = [headers, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${nombreArchivo}_${fechaInicio}_${fechaFin}.csv`;
+    link.click();
+  };
+
+  return (
+    <div className="admin-reportes">
+      <div className="reportes-header">
+        <h1>📊 Reportes y Análisis</h1>
+        <p className="subtitle">Panel de control administrativo con métricas detalladas</p>
+      </div>
+
+      {/* Filtros de fecha */}
+      <div className="filtros-container card">
+        <div className="filtros-row">
+          <div className="filtro-item">
+            <label>Fecha Inicio</label>
+            <input type="date" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} />
+          </div>
+          <div className="filtro-item">
+            <label>Fecha Fin</label>
+            <input type="date" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)} />
+          </div>
+          <div className="filtro-acciones">
+            <button onClick={() => setRangoRapido(7)} className="btn-secondary">Últimos 7 días</button>
+            <button onClick={() => setRangoRapido(30)} className="btn-secondary">Últimos 30 días</button>
+            <button onClick={() => setRangoRapido(90)} className="btn-secondary">Últimos 90 días</button>
+            <button onClick={() => { setFechaInicio(primerDiaMes); setFechaFin(hoy); }} className="btn-primary">Este mes</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs de navegación */}
+      <div className="tabs-container">
+        <button className={activeTab === 'resumen' ? 'tab active' : 'tab'} onClick={() => setActiveTab('resumen')}>
+          📈 Resumen General
+        </button>
+        <button className={activeTab === 'ventas' ? 'tab active' : 'tab'} onClick={() => setActiveTab('ventas')}>
+          💰 Ventas Diarias
+        </button>
+        <button className={activeTab === 'vendedores' ? 'tab active' : 'tab'} onClick={() => setActiveTab('vendedores')}>
+          👥 Vendedores
+        </button>
+        <button className={activeTab === 'rifas' ? 'tab active' : 'tab'} onClick={() => setActiveTab('rifas')}>
+          🎟️ Rifas
+        </button>
+        <button className={activeTab === 'clientes' ? 'tab active' : 'tab'} onClick={() => setActiveTab('clientes')}>
+          👤 Clientes
+        </button>
+        <button className={activeTab === 'numeros' ? 'tab active' : 'tab'} onClick={() => setActiveTab('numeros')}>
+          🔢 Números Populares
+        </button>
+        <button className={activeTab === 'areas' ? 'tab active' : 'tab'} onClick={() => setActiveTab('areas')}>
+          🏢 Áreas
+        </button>
+        <button className={activeTab === 'ganadores' ? 'tab active' : 'tab'} onClick={() => setActiveTab('ganadores')}>
+          🏆 Ganadores
+        </button>
+        <button className={activeTab === 'premios-dia' ? 'tab active' : 'tab'} onClick={() => setActiveTab('premios-dia')}>
+          💎 Premios por Día
+        </button>
+        <button className={activeTab === 'premios-pendientes' ? 'tab active' : 'tab'} onClick={() => setActiveTab('premios-pendientes')}>
+          ⏳ Premios Pendientes
+        </button>
+        <button className={activeTab === 'ventas-premios-vendedor' ? 'tab active' : 'tab'} onClick={() => setActiveTab('ventas-premios-vendedor')}>
+          📊 Ventas/Premios Vendedor/Día
+        </button>
+        <button className={activeTab === 'consolidado-mensual' ? 'tab active' : 'tab'} onClick={() => setActiveTab('consolidado-mensual')}>
+          📅 Consolidado Mensual
+        </button>
+        <button className={activeTab === 'premios-vendedor' ? 'tab active' : 'tab'} onClick={() => setActiveTab('premios-vendedor')}>
+          🎁 Premios por Vendedor
+        </button>
+        <button className={activeTab === 'cancelaciones' ? 'tab active' : 'tab'} onClick={() => setActiveTab('cancelaciones')}>
+          ❌ Cancelaciones
+        </button>
+      </div>
+
+      {/* Contenido según tab activo */}
+      <div className="tab-content">
+        {loading ? (
+          <div className="loading-state">
+            <div className="spinner"></div>
+            <p>Cargando datos...</p>
+          </div>
+        ) : (
+          <>
+            {/* RESUMEN GENERAL */}
+            {activeTab === 'resumen' && resumen && (
+              <div className="resumen-container">
+                {/* Tarjetas de resumen */}
+                <div className="stats-grid">
+                  {/* Ventas Hoy */}
+                  <div className="stat-card ventas-hoy">
+                    <div className="stat-icon">💵</div>
+                    <div className="stat-content">
+                      <h3>Ventas Hoy</h3>
+                      <div className="stat-value">{formatMonto(resumen.ventasHoy?.monto_hoy)}</div>
+                      <div className="stat-detail">{resumen.ventasHoy?.facturas_hoy || 0} facturas • {resumen.ventasHoy?.ventas_hoy || 0} ventas</div>
+                    </div>
+                  </div>
+
+                  {/* Total Ventas Periodo */}
+                  <div className="stat-card ventas-periodo">
+                    <div className="stat-icon">📊</div>
+                    <div className="stat-content">
+                      <h3>Ventas del Periodo</h3>
+                      <div className="stat-value">{formatMonto(resumen.ventas?.monto_total)}</div>
+                      <div className="stat-detail">{resumen.ventas?.total_facturas || 0} facturas • {resumen.ventas?.total_ventas || 0} ventas</div>
+                    </div>
+                  </div>
+
+                  {/* Ticket Promedio */}
+                  <div className="stat-card ticket-promedio">
+                    <div className="stat-icon">🎯</div>
+                    <div className="stat-content">
+                      <h3>Ticket Promedio</h3>
+                      <div className="stat-value">{formatMonto(resumen.ventas?.ticket_promedio)}</div>
+                      <div className="stat-detail">{resumen.ventas?.total_numeros || 0} números vendidos</div>
+                    </div>
+                  </div>
+
+                  {/* Usuarios */}
+                  <div className="stat-card usuarios">
+                    <div className="stat-icon">👥</div>
+                    <div className="stat-content">
+                      <h3>Usuarios</h3>
+                      <div className="stat-value">{resumen.usuarios?.total || 0}</div>
+                      <div className="stat-detail">
+                        {resumen.usuarios?.vendedores || 0} vendedores • {resumen.usuarios?.clientes || 0} clientes • {resumen.usuarios?.activos || 0} activos
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Saldo Total Clientes */}
+                  <div className="stat-card saldo-clientes">
+                    <div className="stat-icon">💳</div>
+                    <div className="stat-content">
+                      <h3>Saldo Total Clientes</h3>
+                      <div className="stat-value">{formatMonto(resumen.usuarios?.saldo_total_clientes)}</div>
+                      <div className="stat-detail">Capital disponible de clientes</div>
+                    </div>
+                  </div>
+
+                  {/* Rifas */}
+                  <div className="stat-card rifas">
+                    <div className="stat-icon">🎟️</div>
+                    <div className="stat-content">
+                      <h3>Rifas</h3>
+                      <div className="stat-value">{resumen.rifas?.total_rifas || 0}</div>
+                      <div className="stat-detail">
+                        {resumen.rifas?.rifas_activas || 0} activas • {resumen.rifas?.rifas_finalizadas || 0} finalizadas
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* VENTAS DIARIAS */}
+            {activeTab === 'ventas' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Ventas por Día</h2>
+                  <button onClick={() => exportarCSV(ventas, 'ventas_diarias')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Facturas</th>
+                      <th>Ventas</th>
+                      <th>Números</th>
+                      <th>Vendedores</th>
+                      <th className="text-right">Monto Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ventas.length === 0 ? (
+                      <tr><td colSpan="6" className="text-center">No hay ventas en este periodo</td></tr>
+                    ) : (
+                      ventas.map((v, idx) => (
+                        <tr key={idx}>
+                          <td>{formatFecha(v.fecha)}</td>
+                          <td>{v.total_facturas}</td>
+                          <td>{v.total_ventas}</td>
+                          <td>{v.total_numeros}</td>
+                          <td>{v.vendedores_activos}</td>
+                          <td className="text-right font-bold">{formatMonto(v.monto_total)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {ventas.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td><strong>TOTALES</strong></td>
+                        <td><strong>{ventas.reduce((sum, v) => sum + Number(v.total_facturas || 0), 0)}</strong></td>
+                        <td><strong>{ventas.reduce((sum, v) => sum + Number(v.total_ventas || 0), 0)}</strong></td>
+                        <td><strong>{ventas.reduce((sum, v) => sum + Number(v.total_numeros || 0), 0)}</strong></td>
+                        <td>-</td>
+                        <td className="text-right"><strong>{formatMonto(ventas.reduce((sum, v) => sum + Number(v.monto_total || 0), 0))}</strong></td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* VENDEDORES */}
+            {activeTab === 'vendedores' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Desempeño de Vendedores</h2>
+                  <button onClick={() => exportarCSV(vendedores, 'vendedores')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Rol</th>
+                      <th>Área</th>
+                      <th>Facturas</th>
+                      <th>Ventas</th>
+                      <th>Números</th>
+                      <th className="text-right">Monto Total</th>
+                      <th>Primera Venta</th>
+                      <th>Última Venta</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vendedores.length === 0 ? (
+                      <tr><td colSpan="10" className="text-center">No hay datos de vendedores</td></tr>
+                    ) : (
+                      vendedores.map((v) => (
+                        <tr key={v.id}>
+                          <td>{v.id}</td>
+                          <td>{v.nombre}</td>
+                          <td><span className={`badge badge-${v.rol}`}>{v.rol}</span></td>
+                          <td>{v.area || '-'}</td>
+                          <td>{v.total_facturas || 0}</td>
+                          <td>{v.total_ventas || 0}</td>
+                          <td>{v.total_numeros || 0}</td>
+                          <td className="text-right font-bold">{formatMonto(v.monto_total)}</td>
+                          <td>{formatFecha(v.primera_venta)}</td>
+                          <td>{formatFecha(v.ultima_venta)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* RIFAS */}
+            {activeTab === 'rifas' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Ventas por Rifa</h2>
+                  <button onClick={() => exportarCSV(rifas, 'rifas')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Descripción</th>
+                      <th>Tipo</th>
+                      <th>Sorteos</th>
+                      <th>Fecha Juego</th>
+                      <th>Facturas</th>
+                      <th>Ventas</th>
+                      <th>Números Vendidos</th>
+                      <th>Números Únicos</th>
+                      <th className="text-right">Monto Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rifas.length === 0 ? (
+                      <tr><td colSpan="10" className="text-center">No hay ventas de rifas en este periodo</td></tr>
+                    ) : (
+                      rifas.map((r) => (
+                        <tr key={r.id}>
+                          <td>{r.id}</td>
+                          <td className="descripcion-cell">{r.descripcion}</td>
+                          <td>{r.tipo_rifa || '-'}</td>
+                          <td>{r.sorteos}</td>
+                          <td>{formatFecha(r.fecha_hora_juego)}</td>
+                          <td>{r.total_facturas || 0}</td>
+                          <td>{r.total_ventas || 0}</td>
+                          <td>{r.total_numeros || 0}</td>
+                          <td>{r.numeros_diferentes || 0}</td>
+                          <td className="text-right font-bold">{formatMonto(r.monto_total)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* CLIENTES */}
+            {activeTab === 'clientes' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Análisis de Clientes</h2>
+                  <button onClick={() => exportarCSV(clientes, 'clientes')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Teléfono</th>
+                      <th className="text-right">Saldo Actual</th>
+                      <th>Estado</th>
+                      <th>Total Compras</th>
+                      <th className="text-right">Total Gastado</th>
+                      <th>Última Compra</th>
+                      <th>Fecha Registro</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clientes.length === 0 ? (
+                      <tr><td colSpan="10" className="text-center">No hay clientes registrados</td></tr>
+                    ) : (
+                      clientes.map((c) => (
+                        <tr key={c.id}>
+                          <td>{c.id}</td>
+                          <td>{c.nombre}</td>
+                          <td>{c.correo}</td>
+                          <td>{c.telefono || '-'}</td>
+                          <td className="text-right" style={{ color: Number(c.saldo) > 0 ? '#27ae60' : '#e74c3c' }}>
+                            {formatMonto(c.saldo)}
+                          </td>
+                          <td>
+                            <span className={`badge ${c.activo ? 'badge-success' : 'badge-danger'}`}>
+                              {c.activo ? 'Activo' : 'Inactivo'}
+                            </span>
+                          </td>
+                          <td>{c.total_compras || 0}</td>
+                          <td className="text-right font-bold">{formatMonto(c.total_gastado)}</td>
+                          <td>{formatFecha(c.ultima_compra)}</td>
+                          <td>{formatFecha(c.fecha_registro)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* NÚMEROS POPULARES */}
+            {activeTab === 'numeros' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Top 100 Números Más Vendidos</h2>
+                  <button onClick={() => exportarCSV(numeros, 'numeros_populares')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <div className="numeros-grid">
+                  {numeros.length === 0 ? (
+                    <p className="text-center">No hay datos de números en este periodo</p>
+                  ) : (
+                    numeros.map((n, idx) => (
+                      <div key={idx} className="numero-card">
+                        <div className="numero-rank">#{idx + 1}</div>
+                        <div className="numero-valor">{n.numero}</div>
+                        <div className="numero-stats">
+                          <div className="stat-item">
+                            <span className="stat-label">Vendido:</span>
+                            <span className="stat-value">{n.veces_vendido} veces</span>
+                          </div>
+                          <div className="stat-item">
+                            <span className="stat-label">Cantidad:</span>
+                            <span className="stat-value">{n.cantidad_total}</span>
+                          </div>
+                          <div className="stat-item">
+                            <span className="stat-label">Monto:</span>
+                            <span className="stat-value">{formatMonto(n.monto_total)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ÁREAS */}
+            {activeTab === 'areas' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Desempeño por Áreas</h2>
+                  <button onClick={() => exportarCSV(areas, 'areas')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Área</th>
+                      <th>Vendedores</th>
+                      <th>Facturas</th>
+                      <th>Ventas</th>
+                      <th className="text-right">Monto Total</th>
+                      <th className="text-right">Promedio/Vendedor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {areas.length === 0 ? (
+                      <tr><td colSpan="7" className="text-center">No hay datos de áreas</td></tr>
+                    ) : (
+                      areas.map((a) => (
+                        <tr key={a.id}>
+                          <td>{a.id}</td>
+                          <td><strong>{a.area}</strong></td>
+                          <td>{a.total_vendedores}</td>
+                          <td>{a.total_facturas || 0}</td>
+                          <td>{a.total_ventas || 0}</td>
+                          <td className="text-right font-bold">{formatMonto(a.monto_total)}</td>
+                          <td className="text-right">{formatMonto(a.promedio_por_vendedor)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* GANADORES */}
+            {activeTab === 'ganadores' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Registro de Ganadores y Premios</h2>
+                  <button onClick={() => exportarCSV(ganadores, 'ganadores')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Fecha</th>
+                      <th>Número Ganador</th>
+                      <th>Nivel</th>
+                      <th>Premio</th>
+                      <th>Cliente</th>
+                      <th>Rifa</th>
+                      <th>Sorteo</th>
+                      <th>Estado Pago</th>
+                      <th>Fecha Pago</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ganadores.length === 0 ? (
+                      <tr><td colSpan="10" className="text-center">No hay ganadores registrados en este periodo</td></tr>
+                    ) : (
+                      ganadores.map((g) => (
+                        <tr key={g.id}>
+                          <td>{g.id}</td>
+                          <td>{formatFecha(g.fecha)}</td>
+                          <td><strong className="numero-ganador">{g.numero_ganador}</strong></td>
+                          <td><span className="badge badge-level">{g.numerol}°</span></td>
+                          <td className="premio-cell">{formatMonto(g.premio)}</td>
+                          <td>{g.cliente || '-'}</td>
+                          <td className="descripcion-cell">{g.rifa || '-'}</td>
+                          <td>{g.sorteo || '-'}</td>
+                          <td>
+                            <span className={`badge ${g.pagado ? 'badge-success' : 'badge-warning'}`}>
+                              {g.pagado ? 'Pagado' : 'Pendiente'}
+                            </span>
+                          </td>
+                          <td>{formatFecha(g.fecha_hora_pago)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {ganadores.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td colSpan="4"><strong>TOTAL PREMIOS</strong></td>
+                        <td className="premio-cell">
+                          <strong>{formatMonto(ganadores.reduce((sum, g) => sum + Number(g.premio || 0), 0))}</strong>
+                        </td>
+                        <td colSpan="5"></td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* CANCELACIONES */}
+            {activeTab === 'cancelaciones' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>Ventas Canceladas/Eliminadas</h2>
+                  <button onClick={() => exportarCSV(cancelaciones, 'cancelaciones')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Factura</th>
+                      <th>Fecha Venta</th>
+                      <th>Fecha Cancelación</th>
+                      <th>Días</th>
+                      <th>Vendedor</th>
+                      <th>Rifa</th>
+                      <th>Número</th>
+                      <th>Cantidad</th>
+                      <th className="text-right">Monto</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cancelaciones.length === 0 ? (
+                      <tr><td colSpan="10" className="text-center">No hay ventas canceladas en este periodo</td></tr>
+                    ) : (
+                      cancelaciones.map((c) => (
+                        <tr key={c.id}>
+                          <td>{c.id}</td>
+                          <td>{c.factura}</td>
+                          <td>{formatFecha(c.fecha)}</td>
+                          <td>{formatFecha(c.fecha_eliminada)}</td>
+                          <td>{c.dias_transcurridos || 0}</td>
+                          <td>{c.vendedor || '-'}</td>
+                          <td className="descripcion-cell">{c.rifa || '-'}</td>
+                          <td><strong>{c.numero}</strong></td>
+                          <td>{c.cantidad}</td>
+                          <td className="text-right font-bold text-danger">{formatMonto(c.total)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {cancelaciones.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td colSpan="9"><strong>TOTAL CANCELADO</strong></td>
+                        <td className="text-right text-danger">
+                          <strong>{formatMonto(cancelaciones.reduce((sum, c) => sum + Number(c.total || 0), 0))}</strong>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* PREMIOS POR DÍA */}
+            {activeTab === 'premios-dia' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>💎 Premios Diarios (Pagados y Pendientes)</h2>
+                  <button onClick={() => exportarCSV(premiosPorDia, 'premios_por_dia')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Total Ganadores</th>
+                      <th>Premios Pagados</th>
+                      <th>Premios Pendientes</th>
+                      <th className="text-right">Total Premios</th>
+                      <th className="text-right">Monto Pagado</th>
+                      <th className="text-right">Monto Pendiente</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {premiosPorDia.length === 0 ? (
+                      <tr><td colSpan="7" className="text-center">No hay premios en este periodo</td></tr>
+                    ) : (
+                      premiosPorDia.map((p, idx) => (
+                        <tr key={idx}>
+                          <td><strong>{formatFecha(p.fecha)}</strong></td>
+                          <td>{p.total_ganadores}</td>
+                          <td><span className="badge badge-success">{p.premios_pagados_count}</span></td>
+                          <td><span className="badge badge-warning">{p.premios_pendientes_count}</span></td>
+                          <td className="text-right font-bold">{formatMonto(p.total_premios)}</td>
+                          <td className="text-right" style={{ color: '#27ae60' }}>{formatMonto(p.monto_pagado)}</td>
+                          <td className="text-right" style={{ color: '#f39c12' }}>{formatMonto(p.monto_pendiente)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {premiosPorDia.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td><strong>TOTALES</strong></td>
+                        <td><strong>{premiosPorDia.reduce((sum, p) => sum + Number(p.total_ganadores || 0), 0)}</strong></td>
+                        <td><strong>{premiosPorDia.reduce((sum, p) => sum + Number(p.premios_pagados_count || 0), 0)}</strong></td>
+                        <td><strong>{premiosPorDia.reduce((sum, p) => sum + Number(p.premios_pendientes_count || 0), 0)}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(premiosPorDia.reduce((sum, p) => sum + Number(p.total_premios || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(premiosPorDia.reduce((sum, p) => sum + Number(p.monto_pagado || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(premiosPorDia.reduce((sum, p) => sum + Number(p.monto_pendiente || 0), 0))}</strong></td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* PREMIOS NO PAGADOS (PENDIENTES) */}
+            {activeTab === 'premios-pendientes' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>⏳ Premios Pendientes de Pago</h2>
+                  <button onClick={() => exportarCSV(premiosNoPagados, 'premios_pendientes')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Fecha</th>
+                      <th>Días</th>
+                      <th>Número Ganador</th>
+                      <th>Nivel</th>
+                      <th className="text-right">Premio</th>
+                      <th>Cliente</th>
+                      <th>Teléfono</th>
+                      <th>Rifa</th>
+                      <th>Sorteo</th>
+                      <th>Factura</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {premiosNoPagados.length === 0 ? (
+                      <tr><td colSpan="11" className="text-center">✅ No hay premios pendientes de pago</td></tr>
+                    ) : (
+                      premiosNoPagados.map((p) => (
+                        <tr key={p.id} className={Number(p.dias_transcurridos) > 30 ? 'row-alert' : ''}>
+                          <td>{p.id}</td>
+                          <td>{formatFecha(p.fecha)}</td>
+                          <td>
+                            <span className={`badge ${Number(p.dias_transcurridos) > 30 ? 'badge-danger' : 'badge-warning'}`}>
+                              {p.dias_transcurridos} días
+                            </span>
+                          </td>
+                          <td><strong className="numero-ganador">{p.numero_ganador}</strong></td>
+                          <td><span className="badge badge-level">{p.nivel_premio}°</span></td>
+                          <td className="text-right font-bold premio-cell">{formatMonto(p.premio)}</td>
+                          <td>{p.cliente || '-'}</td>
+                          <td>{p.telefono || '-'}</td>
+                          <td className="descripcion-cell">{p.rifa || '-'}</td>
+                          <td>{p.sorteo || '-'}</td>
+                          <td>{p.factura || '-'}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {premiosNoPagados.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td colSpan="5"><strong>TOTAL PENDIENTE</strong></td>
+                        <td className="text-right premio-cell">
+                          <strong>{formatMonto(premiosNoPagados.reduce((sum, p) => sum + Number(p.premio || 0), 0))}</strong>
+                        </td>
+                        <td colSpan="5"></td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* VENTAS Y PREMIOS POR VENDEDOR/DÍA */}
+            {activeTab === 'ventas-premios-vendedor' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>📊 Ventas y Premios por Vendedor (Agrupado por Día)</h2>
+                  <button onClick={() => exportarCSV(ventasPremiosVendedorDia, 'ventas_premios_vendedor_dia')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Vendedor</th>
+                      <th>Rol</th>
+                      <th>Área</th>
+                      <th>Facturas</th>
+                      <th>Ventas</th>
+                      <th>Números</th>
+                      <th className="text-right">Monto Ventas</th>
+                      <th>Ganadores</th>
+                      <th className="text-right">Total Premios</th>
+                      <th className="text-right">Pagados</th>
+                      <th className="text-right">Pendientes</th>
+                      <th className="text-right">Utilidad Neta</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ventasPremiosVendedorDia.length === 0 ? (
+                      <tr><td colSpan="13" className="text-center">No hay datos en este periodo</td></tr>
+                    ) : (
+                      ventasPremiosVendedorDia.map((v, idx) => (
+                        <tr key={idx}>
+                          <td>{formatFecha(v.fecha)}</td>
+                          <td><strong>{v.vendedor}</strong></td>
+                          <td><span className={`badge badge-${v.rol}`}>{v.rol}</span></td>
+                          <td>{v.area || '-'}</td>
+                          <td>{v.total_facturas}</td>
+                          <td>{v.total_ventas}</td>
+                          <td>{v.total_numeros}</td>
+                          <td className="text-right font-bold">{formatMonto(v.monto_ventas)}</td>
+                          <td>{v.ganadores}</td>
+                          <td className="text-right">{formatMonto(v.total_premios)}</td>
+                          <td className="text-right" style={{ color: '#27ae60' }}>{formatMonto(v.premios_pagados)}</td>
+                          <td className="text-right" style={{ color: '#f39c12' }}>{formatMonto(v.premios_pendientes)}</td>
+                          <td className="text-right font-bold" style={{ color: Number(v.utilidad_neta) > 0 ? '#27ae60' : '#e74c3c' }}>
+                            {formatMonto(v.utilidad_neta)}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {ventasPremiosVendedorDia.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td colSpan="7"><strong>TOTALES</strong></td>
+                        <td className="text-right"><strong>{formatMonto(ventasPremiosVendedorDia.reduce((sum, v) => sum + Number(v.monto_ventas || 0), 0))}</strong></td>
+                        <td><strong>{ventasPremiosVendedorDia.reduce((sum, v) => sum + Number(v.ganadores || 0), 0)}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(ventasPremiosVendedorDia.reduce((sum, v) => sum + Number(v.total_premios || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(ventasPremiosVendedorDia.reduce((sum, v) => sum + Number(v.premios_pagados || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(ventasPremiosVendedorDia.reduce((sum, v) => sum + Number(v.premios_pendientes || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(ventasPremiosVendedorDia.reduce((sum, v) => sum + Number(v.utilidad_neta || 0), 0))}</strong></td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* CONSOLIDADO MENSUAL */}
+            {activeTab === 'consolidado-mensual' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>📅 Consolidado Mensual de Ventas y Premios</h2>
+                  <button onClick={() => exportarCSV(consolidadoMensual, 'consolidado_mensual')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>Mes</th>
+                      <th>Facturas</th>
+                      <th>Ventas</th>
+                      <th>Números</th>
+                      <th className="text-right">Monto Ventas</th>
+                      <th>Ganadores</th>
+                      <th className="text-right">Total Premios</th>
+                      <th className="text-right">Premios Pagados</th>
+                      <th className="text-right">Premios Pendientes</th>
+                      <th className="text-right">Utilidad Neta</th>
+                      <th>% Premios</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {consolidadoMensual.length === 0 ? (
+                      <tr><td colSpan="11" className="text-center">No hay datos mensuales</td></tr>
+                    ) : (
+                      consolidadoMensual.map((m, idx) => (
+                        <tr key={idx}>
+                          <td><strong>{m.mes}</strong></td>
+                          <td>{m.total_facturas}</td>
+                          <td>{m.total_ventas}</td>
+                          <td>{m.total_numeros}</td>
+                          <td className="text-right font-bold">{formatMonto(m.monto_ventas)}</td>
+                          <td>{m.total_ganadores}</td>
+                          <td className="text-right">{formatMonto(m.total_premios)}</td>
+                          <td className="text-right" style={{ color: '#27ae60' }}>{formatMonto(m.premios_pagados)}</td>
+                          <td className="text-right" style={{ color: '#f39c12' }}>{formatMonto(m.premios_pendientes)}</td>
+                          <td className="text-right font-bold" style={{ color: Number(m.utilidad_neta) > 0 ? '#27ae60' : '#e74c3c' }}>
+                            {formatMonto(m.utilidad_neta)}
+                          </td>
+                          <td>{m.porcentaje_premios || 0}%</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {consolidadoMensual.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td><strong>TOTALES</strong></td>
+                        <td><strong>{consolidadoMensual.reduce((sum, m) => sum + Number(m.total_facturas || 0), 0)}</strong></td>
+                        <td><strong>{consolidadoMensual.reduce((sum, m) => sum + Number(m.total_ventas || 0), 0)}</strong></td>
+                        <td><strong>{consolidadoMensual.reduce((sum, m) => sum + Number(m.total_numeros || 0), 0)}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(consolidadoMensual.reduce((sum, m) => sum + Number(m.monto_ventas || 0), 0))}</strong></td>
+                        <td><strong>{consolidadoMensual.reduce((sum, m) => sum + Number(m.total_ganadores || 0), 0)}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(consolidadoMensual.reduce((sum, m) => sum + Number(m.total_premios || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(consolidadoMensual.reduce((sum, m) => sum + Number(m.premios_pagados || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(consolidadoMensual.reduce((sum, m) => sum + Number(m.premios_pendientes || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(consolidadoMensual.reduce((sum, m) => sum + Number(m.utilidad_neta || 0), 0))}</strong></td>
+                        <td>-</td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+
+            {/* PREMIOS POR VENDEDOR */}
+            {activeTab === 'premios-vendedor' && (
+              <div className="tabla-container card">
+                <div className="tabla-header">
+                  <h2>🎁 Premios por Vendedor (Consolidado)</h2>
+                  <button onClick={() => exportarCSV(premiosPorVendedor, 'premios_por_vendedor')} className="btn-export">
+                    📥 Exportar CSV
+                  </button>
+                </div>
+                <table className="tabla-reportes">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Vendedor</th>
+                      <th>Rol</th>
+                      <th>Área</th>
+                      <th>Total Ganadores</th>
+                      <th className="text-right">Total Premios</th>
+                      <th className="text-right">Premios Pagados</th>
+                      <th className="text-right">Premios Pendientes</th>
+                      <th>Count Pagados</th>
+                      <th>Count Pendientes</th>
+                      <th>Primer Premio</th>
+                      <th>Último Premio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {premiosPorVendedor.length === 0 ? (
+                      <tr><td colSpan="12" className="text-center">No hay premios registrados</td></tr>
+                    ) : (
+                      premiosPorVendedor.map((v) => (
+                        <tr key={v.vendedor_id}>
+                          <td>{v.vendedor_id}</td>
+                          <td><strong>{v.vendedor}</strong></td>
+                          <td><span className={`badge badge-${v.rol}`}>{v.rol}</span></td>
+                          <td>{v.area || '-'}</td>
+                          <td>{v.total_ganadores}</td>
+                          <td className="text-right font-bold">{formatMonto(v.total_premios)}</td>
+                          <td className="text-right" style={{ color: '#27ae60' }}>{formatMonto(v.premios_pagados)}</td>
+                          <td className="text-right" style={{ color: '#f39c12' }}>{formatMonto(v.premios_pendientes)}</td>
+                          <td><span className="badge badge-success">{v.count_pagados}</span></td>
+                          <td><span className="badge badge-warning">{v.count_pendientes}</span></td>
+                          <td>{formatFecha(v.primer_premio)}</td>
+                          <td>{formatFecha(v.ultimo_premio)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  {premiosPorVendedor.length > 0 && (
+                    <tfoot>
+                      <tr className="total-row">
+                        <td colSpan="4"><strong>TOTALES</strong></td>
+                        <td><strong>{premiosPorVendedor.reduce((sum, v) => sum + Number(v.total_ganadores || 0), 0)}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(premiosPorVendedor.reduce((sum, v) => sum + Number(v.total_premios || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(premiosPorVendedor.reduce((sum, v) => sum + Number(v.premios_pagados || 0), 0))}</strong></td>
+                        <td className="text-right"><strong>{formatMonto(premiosPorVendedor.reduce((sum, v) => sum + Number(v.premios_pendientes || 0), 0))}</strong></td>
+                        <td><strong>{premiosPorVendedor.reduce((sum, v) => sum + Number(v.count_pagados || 0), 0)}</strong></td>
+                        <td><strong>{premiosPorVendedor.reduce((sum, v) => sum + Number(v.count_pendientes || 0), 0)}</strong></td>
+                        <td colSpan="2"></td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

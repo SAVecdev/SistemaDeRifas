@@ -1,0 +1,398 @@
+.transacciones-container {
+  padding: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.transacciones-header {
+  margin-bottom: 10px;
+}
+
+.transacciones-header h1 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.transacciones-header p {
+  color: #666;
+  font-size: 11px;
+}
+
+/* Totales Resumen */
+.totales-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.total-card {
+  background: white;
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 3px solid;
+}
+
+.total-card.recarga {
+  border-left-color: #28a745;
+}
+
+.total-card.retiro {
+  border-left-color: #dc3545;
+}
+
+.total-card.neto {
+  border-left-color: #667eea;
+}
+
+.total-icono {
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+}
+
+.total-card.recarga .total-icono {
+  color: #28a745;
+  background-color: #d4edda;
+}
+
+.total-card.retiro .total-icono {
+  color: #dc3545;
+  background-color: #f8d7da;
+}
+
+.total-card.neto .total-icono {
+  color: #667eea;
+  background-color: #e7e9fc;
+}
+
+.total-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.total-label {
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+}
+
+.total-valor {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Filtros */
+.transacciones-filtros {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 4px 10px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.filtro-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.filtro-btn.activo {
+  background-color: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+/* Lista de transacciones */
+.transacciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.transaccion-item {
+  background: white;
+  border-radius: 6px;
+  padding: 8px 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex;
+  gap: 10px;
+  border-left: 3px solid;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transaccion-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.transaccion-item.recarga {
+  border-left-color: #28a745;
+}
+
+.transaccion-item.retiro {
+  border-left-color: #dc3545;
+}
+
+.transaccion-icono {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.transaccion-item.recarga .transaccion-icono {
+  background-color: #d4edda;
+  color: #28a745;
+}
+
+.transaccion-item.retiro .transaccion-icono {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.transaccion-contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.transaccion-principal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.transaccion-info h4 {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.transaccion-descripcion {
+  font-size: 11px;
+  color: #666;
+  margin: 2px 0;
+}
+
+.transaccion-realizado {
+  font-size: 10px;
+  color: #999;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+.transaccion-monto {
+  text-align: right;
+}
+
+.monto {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.monto.recarga {
+  color: #28a745;
+}
+
+.monto.retiro {
+  color: #dc3545;
+}
+
+.transaccion-detalles {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid #f0f0f0;
+  flex-wrap: wrap;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.detalle-label {
+  font-size: 9px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.detalle-valor {
+  font-size: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Estados */
+.loading,
+.alert {
+  padding: 40px;
+  text-align: center;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.loading {
+  color: #667eea;
+  font-size: 18px;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.sin-transacciones {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.sin-transacciones p {
+  font-size: 18px;
+  color: #999;
+}
+
+/* Paginación */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 10px 0;
+}
+
+.paginacion-btn {
+  padding: 4px 10px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.paginacion-btn:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.paginacion-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.paginacion-numeros {
+  display: flex;
+  gap: 3px;
+}
+
+.paginacion-numero {
+  padding: 4px 8px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+  min-width: 30px;
+}
+
+.paginacion-numero:hover {
+  background-color: #f5f5f5;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.paginacion-numero.activo {
+  background-color: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.paginacion-info {
+  text-align: center;
+  margin-top: 6px;
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transacciones-container {
+    padding: 20px 15px;
+  }
+
+  .transacciones-header h1 {
+    font-size: 24px;
+  }
+
+  .totales-resumen {
+    grid-template-columns: 1fr;
+  }
+
+  .transaccion-item {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .transaccion-principal {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .transaccion-monto {
+    text-align: left;
+  }
+
+  .transaccion-detalles {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .monto {
+    font-size: 20px;
+  }
+}

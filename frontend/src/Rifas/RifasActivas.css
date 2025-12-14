@@ -1,0 +1,139 @@
+.rifas-activas {
+  padding-bottom: 40px;
+}
+
+.rifas-activas h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #1a1a2e;
+  text-align: center;
+}
+
+.filtros-container {
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.busqueda {
+  margin-bottom: 20px;
+}
+
+.busqueda input {
+  max-width: 500px;
+}
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rifas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.no-rifas {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.rifa-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rifa-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.rifa-imagen {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.rifa-info {
+  padding: 20px;
+  position: relative;
+}
+
+.categoria-badge {
+  position: absolute;
+  top: -30px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.rifa-info h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #1a1a2e;
+}
+
+.descripcion {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.rifa-detalles {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.detalle-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.detalle-item .label {
+  font-weight: 600;
+  color: #555;
+}
+
+.detalle-item .valor {
+  color: #333;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 15px 0 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 15px;
+}

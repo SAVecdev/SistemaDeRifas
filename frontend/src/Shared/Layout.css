@@ -1,0 +1,36 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.layout-main {
+  flex: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-content {
+  flex: 1;
+  padding: 2rem;
+  margin-top: 70px;
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout-main {
+    margin-left: 0;
+  }
+
+  .layout-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout-content {
+    padding: 0.75rem;
+  }
+}

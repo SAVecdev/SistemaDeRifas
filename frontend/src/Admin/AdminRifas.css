@@ -1,0 +1,4 @@
+.acciones-botones {
+  display: flex;
+  gap: 5px;
+}

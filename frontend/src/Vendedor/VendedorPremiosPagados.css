@@ -1,0 +1,574 @@
+.vendedor-premios-container {
+  max-width: 1600px;
+  margin: 20px auto;
+  padding: 0;
+  background: #f9fafb;
+}
+
+.premios-header {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  padding: 30px;
+  border-radius: 12px 12px 0 0;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+.header-content {
+  margin-bottom: 0;
+}
+
+.premios-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.premios-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* Pestañas */
+.premios-tabs {
+  display: flex;
+  gap: 12px;
+  margin: -20px 30px 20px 30px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-btn {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #6b7280;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 15px;
+}
+
+.tab-btn:hover {
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.05);
+}
+
+.tab-btn.active {
+  color: #ec4899;
+  border-bottom-color: #ec4899;
+  background: rgba(236, 72, 153, 0.1);
+}
+
+/* Mensajes */
+.mensaje {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mensaje-success {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.mensaje-error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+.mensaje-warning {
+  background: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+.mensaje-info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+/* Cards */
+.search-card,
+.resultados-card,
+.filtros-card,
+.historial-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 25px;
+}
+
+.search-card h2,
+.resultados-card h3,
+.filtros-card h2,
+.historial-card h3 {
+  color: #1a1a2e;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.resultados-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.resultados-header h3 {
+  margin-bottom: 0;
+}
+
+/* Formulario de búsqueda */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+}
+
+.search-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.search-input-group input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.search-input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.btn-search {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-search:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-search:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Filtros */
+.filtros-group {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.filtros-group .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.filtros-group input[type="date"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.btn-aplicar {
+  padding: 12px 25px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-aplicar:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.btn-aplicar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Tabla */
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.premios-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.premios-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.premios-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.premios-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+}
+
+.premios-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.premios-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.premios-table tbody tr.premio-pagado {
+  background: #f0f7f0;
+}
+
+.premios-table tfoot {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.premios-table tfoot td {
+  padding: 15px;
+  border-top: 2px solid #667eea;
+}
+
+/* Columnas específicas */
+.cliente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cliente-info strong {
+  color: #1a1a2e;
+}
+
+.cliente-info small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.numero-ganador {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.factura {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #764ba2;
+}
+
+.monto {
+  font-weight: bold;
+  color: #27ae60;
+  font-size: 1.05rem;
+}
+
+.fecha-pago {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Badges */
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-danger {
+  background: #f8d7da;
+  color: #721c24;
+  font-weight: 600;
+}
+
+.texto-expirado {
+  color: #dc3545;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: help;
+}
+
+.badge-nivel {
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+/* Botón pagar */
+.btn-pagar {
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-pagar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(17, 153, 142, 0.3);
+}
+
+.btn-pagar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Botón pagar todos */
+.btn-pagar-todos {
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-pagar-todos:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+}
+
+.btn-pagar-todos:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Stats Summary */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #1a1a2e;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* Estilos para agrupación desplegable */
+.premios-agrupados .factura-row {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.premios-agrupados .factura-row:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  transform: translateX(3px);
+}
+
+.premios-agrupados .factura-row.clickable {
+  user-select: none;
+}
+
+.expand-cell {
+  text-align: center;
+  padding: 8px !important;
+}
+
+.expand-icon {
+  font-size: 12px;
+  color: #6b7280;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.premio-detalle {
+  background: #fefefe;
+  border-left: 3px solid #ec4899;
+}
+
+.premio-detalle td {
+  padding: 0 !important;
+}
+
+.premio-detalle-content {
+  padding: 15px 20px;
+  margin: 5px 0;
+  border-radius: 8px;
+  background: linear-gradient(to right, #fef3f8 0%, #ffffff 100%);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.detalle-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detalle-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detalle-value {
+  font-size: 0.95rem;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.detalle-value.monto {
+  color: #059669;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.detalle-value.numero-ganador {
+  color: #ec4899;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vendedor-premios-container {
+    padding: 15px;
+  }
+
+  .premios-header h1 {
+    font-size: 2rem;
+  }
+
+  .search-input-group {
+    flex-direction: column;
+  }
+
+  .filtros-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros-group .form-group {
+    margin-bottom: 15px;
+  }
+
+  .premios-table {
+    font-size: 0.85rem;
+  }
+
+  .premios-table th,
+  .premios-table td {
+    padding: 10px 8px;
+  }
+
+  .stats-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .premio-detalle-content {
+    grid-template-columns: 1fr;
+  }
+}

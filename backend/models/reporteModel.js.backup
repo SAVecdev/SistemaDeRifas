@@ -1,0 +1,430 @@
+import pool from '../config/database.js';
+
+/**
+ * Reporte general de ventas con filtros de fecha
+ */
+export const getReporteVentas = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      DATE(v.fecha) as fecha,
+      COUNT(DISTINCT v.id_factura) as total_facturas,
+      COUNT(v.id) as total_ventas,
+      SUM(v.cantidad) as total_numeros,
+      SUM(v.total) as monto_total,
+      COUNT(DISTINCT v.id_usuario) as vendedores_activos
+    FROM venta v
+    WHERE v.eliminada = 0 
+      AND v.pagada = 1
+      AND v.fecha BETWEEN ? AND ?
+    GROUP BY DATE(v.fecha)
+    ORDER BY fecha DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de ventas por vendedor
+ */
+export const getReporteVentasPorVendedor = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      u.id,
+      u.nombre,
+      u.correo,
+      u.rol,
+      a.nombre as area,
+      COUNT(DISTINCT v.id_factura) as total_facturas,
+      COUNT(v.id) as total_ventas,
+      SUM(v.cantidad) as total_numeros,
+      SUM(v.total) as monto_total,
+      MIN(v.fecha) as primera_venta,
+      MAX(v.fecha) as ultima_venta
+    FROM usuario u
+    LEFT JOIN venta v ON u.id = v.id_usuario AND v.eliminada = 0 AND v.pagada = 1 AND v.fecha BETWEEN ? AND ?
+    LEFT JOIN area a ON u.id_area = a.id
+    WHERE u.rol IN ('vendedor', 'administrador', 'supervisor')
+    GROUP BY u.id, u.nombre, u.correo, u.rol, a.nombre
+    ORDER BY monto_total DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de ventas por rifa
+ */
+export const getReporteVentasPorRifa = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      r.id,
+      r.descripcion,
+      tr.nombre as tipo_rifa,
+      r.sorteos,
+      r.fecha_hora_juego,
+      COUNT(DISTINCT v.id_factura) as total_facturas,
+      COUNT(v.id) as total_ventas,
+      SUM(v.cantidad) as total_numeros,
+      SUM(v.total) as monto_total,
+      COUNT(DISTINCT v.numero) as numeros_diferentes
+    FROM rifa r
+    LEFT JOIN venta v ON r.id = v.id_rifas AND v.eliminada = 0 AND v.pagada = 1 AND v.fecha BETWEEN ? AND ?
+    LEFT JOIN tipo_rifa tr ON r.id_tipo = tr.id
+    GROUP BY r.id, r.descripcion, tr.nombre, r.sorteos, r.fecha_hora_juego
+    HAVING total_ventas > 0
+    ORDER BY monto_total DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de clientes con saldo y actividad
+ */
+export const getReporteClientes = async () => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      u.id,
+      u.nombre,
+      u.correo,
+      u.telefono,
+      u.saldo,
+      u.activo,
+      u.created_at as fecha_registro,
+      COUNT(v.id) as total_compras,
+      SUM(v.total) as total_gastado,
+      MAX(v.fecha) as ultima_compra
+    FROM usuario u
+    LEFT JOIN venta v ON u.id = v.id_usuario AND v.eliminada = 0 AND v.pagada = 1
+    WHERE u.rol IN ('cliente', 'usuario_registrado')
+    GROUP BY u.id, u.nombre, u.correo, u.telefono, u.saldo, u.activo, u.created_at
+    ORDER BY total_gastado DESC`
+  );
+  return rows;
+};
+
+/**
+ * Reporte de números más vendidos
+ */
+export const getReporteNumerosMasVendidos = async (fechaInicio, fechaFin, limite = 50) => {
+  const limiteInt = parseInt(limite) || 50;
+  const [rows] = await pool.execute(
+    `SELECT 
+      v.numero,
+      COUNT(*) as veces_vendido,
+      SUM(v.cantidad) as cantidad_total,
+      SUM(v.total) as monto_total,
+      GROUP_CONCAT(DISTINCT r.descripcion SEPARATOR ', ') as rifas
+    FROM venta v
+    LEFT JOIN rifa r ON v.id_rifas = r.id
+    WHERE v.eliminada = 0 
+      AND v.pagada = 1
+      AND v.fecha BETWEEN ? AND ?
+    GROUP BY v.numero
+    ORDER BY veces_vendido DESC, cantidad_total DESC
+    LIMIT ${limiteInt}`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de áreas con desempeño
+ */
+export const getReporteAreas = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      a.id,
+      a.nombre as area,
+      COUNT(DISTINCT u.id) as total_vendedores,
+      COUNT(DISTINCT v.id_factura) as total_facturas,
+      COUNT(v.id) as total_ventas,
+      SUM(v.total) as monto_total,
+      ROUND(SUM(v.total) / COUNT(DISTINCT u.id), 2) as promedio_por_vendedor
+    FROM area a
+    LEFT JOIN usuario u ON a.id = u.id_area AND u.rol IN ('vendedor', 'supervisor', 'administrador')
+    LEFT JOIN venta v ON u.id = v.id_usuario AND v.eliminada = 0 AND v.pagada = 1 AND v.fecha BETWEEN ? AND ?
+    GROUP BY a.id, a.nombre
+    ORDER BY monto_total DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Dashboard resumen general
+ */
+export const getResumenGeneral = async (fechaInicio, fechaFin) => {
+  // Total de ventas
+  const [ventas] = await pool.execute(
+    `SELECT 
+      COUNT(DISTINCT id_factura) as total_facturas,
+      COUNT(id) as total_ventas,
+      SUM(cantidad) as total_numeros,
+      SUM(total) as monto_total,
+      AVG(total) as ticket_promedio
+    FROM venta 
+    WHERE eliminada = 0 AND pagada = 1 AND fecha BETWEEN ? AND ?`,
+    [fechaInicio, fechaFin]
+  );
+
+  // Total de usuarios
+  const [usuarios] = await pool.execute(
+    `SELECT 
+      COUNT(*) as total,
+      SUM(CASE WHEN activo = 1 THEN 1 ELSE 0 END) as activos,
+      SUM(CASE WHEN rol = 'vendedor' THEN 1 ELSE 0 END) as vendedores,
+      SUM(CASE WHEN rol = 'cliente' OR rol = 'usuario_registrado' THEN 1 ELSE 0 END) as clientes,
+      SUM(saldo) as saldo_total_clientes
+    FROM usuario`
+  );
+
+  // Total de rifas
+  const [rifas] = await pool.execute(
+    `SELECT 
+      COUNT(*) as total_rifas,
+      COUNT(CASE WHEN fecha_hora_juego > NOW() THEN 1 END) as rifas_activas,
+      COUNT(CASE WHEN fecha_hora_juego <= NOW() THEN 1 END) as rifas_finalizadas
+    FROM rifa`
+  );
+
+  // Ventas del día
+  const [ventasHoy] = await pool.execute(
+    `SELECT 
+      COUNT(DISTINCT id_factura) as facturas_hoy,
+      COUNT(id) as ventas_hoy,
+      SUM(total) as monto_hoy
+    FROM venta 
+    WHERE eliminada = 0 AND pagada = 1 AND DATE(fecha) = CURDATE()`
+  );
+
+  return {
+    ventas: ventas[0],
+    usuarios: usuarios[0],
+    rifas: rifas[0],
+    ventasHoy: ventasHoy[0]
+  };
+};
+
+/**
+ * Reporte de ganadores y premios pagados
+ */
+export const getReporteGanadores = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      g.id_numero_ganador,
+      g.fecha,
+      g.numerol as numero_ganador,
+      g.nivel_premio,
+      g.saldo_premio as premio,
+      g.fecha_hora_pago,
+      g.pagada as pagado,
+      g.id_factura,
+      u.nombre as cliente,
+      u.correo,
+      r.descripcion as rifa,
+      ng.sorteo
+    FROM ganadores g
+    LEFT JOIN usuario u ON g.id_usuario = u.id
+    LEFT JOIN numero_ganadores ng ON g.id_numero_ganador = ng.id
+    LEFT JOIN rifa r ON ng.id_rifa = r.id
+    WHERE g.fecha BETWEEN ? AND ?
+    ORDER BY g.fecha DESC, g.nivel_premio ASC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de facturas eliminadas/canceladas
+ */
+export const getReporteVentasCanceladas = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      v.id,
+      v.id_factura,
+      v.factura,
+      v.fecha,
+      v.fecha_eliminada,
+      u.nombre as vendedor,
+      r.descripcion as rifa,
+      v.numero,
+      v.cantidad,
+      v.total,
+      DATEDIFF(v.fecha_eliminada, v.fecha) as dias_transcurridos
+    FROM venta v
+    LEFT JOIN usuario u ON v.id_usuario = u.id
+    LEFT JOIN rifa r ON v.id_rifas = r.id
+    WHERE v.eliminada = 1 AND v.fecha BETWEEN ? AND ?
+    ORDER BY v.fecha_eliminada DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de premios por día
+ */
+export const getReportePremiosPorDia = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      DATE(g.fecha) as fecha,
+      COUNT(*) as total_premios,
+      COUNT(CASE WHEN g.pagada = 1 THEN 1 END) as premios_pagados,
+      COUNT(CASE WHEN g.pagada = 0 THEN 1 END) as premios_pendientes,
+      SUM(CAST(g.saldo_premio AS DECIMAL(10,2))) as total_monto,
+      SUM(CASE WHEN g.pagada = 1 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as monto_pagado,
+      SUM(CASE WHEN g.pagada = 0 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as monto_pendiente
+    FROM ganadores g
+    WHERE g.fecha BETWEEN ? AND ?
+    GROUP BY DATE(g.fecha)
+    ORDER BY fecha DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de premios no pagados (pendientes)
+ */
+export const getReportePremiosNoPagados = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      g.id_numero_ganador,
+      g.fecha,
+      g.numerol as numero_ganador,
+      g.nivel_premio,
+      g.saldo_premio as premio,
+      g.fecha_hora_pago,
+      g.id_factura as factura,
+      u.id as cliente_id,
+      u.nombre as cliente,
+      u.correo,
+      u.telefono,
+      r.id as rifa_id,
+      r.descripcion as rifa,
+      ng.sorteo,
+      DATEDIFF(NOW(), g.fecha) as dias_transcurridos
+    FROM ganadores g
+    LEFT JOIN usuario u ON g.id_usuario = u.id
+    LEFT JOIN numero_ganadores ng ON g.id_numero_ganador = ng.id
+    LEFT JOIN rifa r ON ng.id_rifa = r.id
+    WHERE g.pagada = 0 AND g.fecha BETWEEN ? AND ?
+    ORDER BY g.fecha DESC, g.saldo_premio DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte de ventas y premios por vendedor agrupado por día
+ */
+export const getReporteVentasPremiosPorVendedorDia = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      DATE(v.fecha) as fecha,
+      u.id as vendedor_id,
+      u.nombre as vendedor,
+      u.rol,
+      a.nombre as area,
+      COUNT(DISTINCT v.id_factura) as total_facturas,
+      COUNT(v.id) as total_ventas,
+      SUM(v.cantidad) as total_numeros,
+      SUM(v.total) as monto_ventas,
+      COALESCE(premios.total_ganadores, 0) as ganadores,
+      COALESCE(premios.total_premios, 0) as total_premios,
+      COALESCE(premios.premios_pagados, 0) as premios_pagados,
+      COALESCE(premios.premios_pendientes, 0) as premios_pendientes,
+      (SUM(v.total) - COALESCE(premios.premios_pagados, 0)) as utilidad_neta
+    FROM venta v
+    INNER JOIN usuario u ON v.id_usuario = u.id
+    LEFT JOIN area a ON u.id_area = a.id
+    LEFT JOIN (
+      SELECT 
+        DATE(g.fecha) as fecha,
+        v2.id_vendedor as vendedor_id,
+        COUNT(*) as total_ganadores,
+        SUM(CAST(g.saldo_premio AS DECIMAL(10,2))) as total_premios,
+        SUM(CASE WHEN g.pagada = 1 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as premios_pagados,
+        SUM(CASE WHEN g.pagada = 0 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as premios_pendientes
+      FROM ganadores g
+      LEFT JOIN factura f ON g.id_factura = f.id
+      LEFT JOIN venta v2 ON f.id = v2.id_factura
+      WHERE g.fecha BETWEEN ? AND ?
+      GROUP BY DATE(g.fecha), v2.id_vendedor
+    ) premios ON DATE(v.fecha) = premios.fecha AND u.id = premios.vendedor_id
+    WHERE v.eliminada = 0 AND v.pagada = 1 AND v.fecha BETWEEN ? AND ?
+    GROUP BY DATE(v.fecha), u.id, u.nombre, u.rol, a.nombre
+    ORDER BY fecha DESC, monto_ventas DESC`,
+    [fechaInicio, fechaFin, fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Consolidado mensual de ventas y premios
+ */
+export const getConsolidadoMensual = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      DATE_FORMAT(v.fecha, '%Y-%m') as mes,
+      COUNT(DISTINCT v.id_factura) as total_facturas,
+      COUNT(v.id) as total_ventas,
+      SUM(v.cantidad) as total_numeros,
+      SUM(v.total) as monto_ventas,
+      COALESCE(premios.total_ganadores, 0) as total_ganadores,
+      COALESCE(premios.total_premios, 0) as total_premios,
+      COALESCE(premios.premios_pagados, 0) as premios_pagados,
+      COALESCE(premios.premios_pendientes, 0) as premios_pendientes,
+      (SUM(v.total) - COALESCE(premios.premios_pagados, 0)) as utilidad_neta,
+      ROUND((COALESCE(premios.premios_pagados, 0) / SUM(v.total)) * 100, 2) as porcentaje_premios
+    FROM venta v
+    LEFT JOIN (
+      SELECT 
+        DATE_FORMAT(g.fecha, '%Y-%m') as mes,
+        COUNT(*) as total_ganadores,
+        SUM(CAST(g.saldo_premio AS DECIMAL(10,2))) as total_premios,
+        SUM(CASE WHEN g.pagada = 1 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as premios_pagados,
+        SUM(CASE WHEN g.pagada = 0 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as premios_pendientes
+      FROM ganadores g
+      WHERE g.fecha BETWEEN ? AND ?
+      GROUP BY DATE_FORMAT(g.fecha, '%Y-%m')
+    ) premios ON DATE_FORMAT(v.fecha, '%Y-%m') = premios.mes
+    WHERE v.eliminada = 0 AND v.pagada = 1 AND v.fecha BETWEEN ? AND ?
+    GROUP BY DATE_FORMAT(v.fecha, '%Y-%m')
+    ORDER BY mes DESC`,
+    [fechaInicio, fechaFin, fechaInicio, fechaFin]
+  );
+  return rows;
+};
+
+/**
+ * Reporte detallado de premios por vendedor (consolidado)
+ */
+export const getReportePremiosPorVendedor = async (fechaInicio, fechaFin) => {
+  const [rows] = await pool.execute(
+    `SELECT 
+      u.id as vendedor_id,
+      u.nombre as vendedor,
+      u.rol,
+      a.nombre as area,
+      COUNT(*) as total_ganadores,
+      SUM(CAST(g.saldo_premio AS DECIMAL(10,2))) as total_premios,
+      SUM(CASE WHEN g.pagada = 1 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as premios_pagados,
+      SUM(CASE WHEN g.pagada = 0 THEN CAST(g.saldo_premio AS DECIMAL(10,2)) ELSE 0 END) as premios_pendientes,
+      SUM(CASE WHEN g.pagada = 1 THEN 1 ELSE 0 END) as count_pagados,
+      SUM(CASE WHEN g.pagada = 0 THEN 1 ELSE 0 END) as count_pendientes,
+      MIN(g.fecha) as primer_premio,
+      MAX(g.fecha) as ultimo_premio
+    FROM ganadores g
+    LEFT JOIN factura f ON g.id_factura = f.id
+    LEFT JOIN venta v ON f.id = v.id_factura
+    LEFT JOIN usuario u ON g.id_usuario = u.id
+    LEFT JOIN area a ON u.id_area = a.id
+    WHERE g.fecha BETWEEN ? AND ?
+    GROUP BY u.id, u.nombre, u.rol, a.nombre
+    ORDER BY total_premios DESC`,
+    [fechaInicio, fechaFin]
+  );
+  return rows;
+};

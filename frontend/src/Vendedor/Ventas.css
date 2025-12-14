@@ -1,0 +1,30 @@
+.ventas-page{padding:18px}
+.chips-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.chip{padding:6px 10px;border-radius:8px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.ventas-grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
+.form-card{background:#0f1724;color:#fff;padding:18px;border-radius:8px}
+.form-card h2{color:#fff;margin-bottom:16px;font-size:20px}
+.form-card label{display:block;margin-top:12px;margin-bottom:6px;font-weight:600;color:#e5e7eb;font-size:14px}
+.form-card input,.form-card select{width:100%;padding:10px 12px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#f9fafb;font-size:14px}
+.form-card input:focus,.form-card select:focus{outline:none;border-color:#3b82f6;background:#111827}
+.value-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px;margin-bottom:12px}
+.value-buttons button{background:#1d4ed8;color:#fff;padding:12px;border-radius:8px;border:none;cursor:pointer;font-size:14px;font-weight:600;transition:all 0.2s}
+.value-buttons button:hover{background:#1e40af}
+.value-buttons button.active{background:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.3)}
+.btn-add{margin-top:16px;background:#059669;color:#fff;padding:12px;border-radius:8px;border:none;width:100%;cursor:pointer}
+.right-card{background:#fff;padding:14px;border-radius:8px}
+.cart-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.actions button{margin-left:8px}
+.btn-pay{background:#2563eb;color:#fff;padding:8px 12px;border-radius:8px;border:none}
+.btn-clear{background:#eef2ff;border:1px solid #dbeafe;padding:8px 12px;border-radius:8px}
+.cart-table{width:100%;border-collapse:collapse}
+.cart-table thead th{background:#f8fafc;padding:10px;border-bottom:1px solid #eee;text-align:left}
+.cart-table td{padding:10px;border-bottom:1px solid #f1f5f9}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width:900px){
+  .ventas-grid{grid-template-columns:1fr}
+}

@@ -1,0 +1,22 @@
+.vender-page{padding:16px}
+.blocked-numbers{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.chip{padding:6px 10px;border-radius:8px;background:#fdecea;color:#c0392b;border:1px solid #f5c6cb}
+.vender-grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+.vender-form{padding:12px}
+.vender-form .row{margin-bottom:10px}
+.vender-form label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+.vender-form input,.vender-form select{width:100%;padding:8px;border-radius:6px;border:1px solid #ddd}
+.vender-form .inline{display:flex;gap:10px}
+.vender-form .inline > div{flex:1}
+.valor-buttons{display:flex;flex-wrap:wrap;gap:8px}
+.valor-buttons button{padding:8px 12px;border-radius:8px;border:1px solid #e6eef8;background:#f7f9fc;cursor:pointer}
+.valor-buttons button.active{background:#2f80ed;color:#fff;border-color:#1f6fe0}
+.btn-add{margin-top:8px;padding:10px 14px;border-radius:8px;background:#16a34a;color:#fff;border:none;cursor:pointer}
+.vender-cart{padding:12px}
+.cart-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.tabla{width:100%;border-collapse:collapse}
+.tabla thead th{background:#f8fafc;padding:10px;border-bottom:1px solid #eee;text-align:left}
+.tabla td{padding:8px;border-bottom:1px solid #f1f5f9}
+.icon-btn{padding:6px 8px;border-radius:6px;border:1px solid #e6e9ef;background:#fff;cursor:pointer}
+.btn-pay{background:#2563eb;color:#fff;border:none;padding:8px 12px;border-radius:6px}
+@media (max-width:900px){.vender-grid{grid-template-columns:1fr}.vender-form{order:2}.vender-cart{order:1}}

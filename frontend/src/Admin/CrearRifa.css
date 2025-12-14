@@ -1,0 +1,39 @@
+.crear-rifa {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.crear-rifa h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #1a1a2e;
+}
+
+.crear-rifa-form {
+  padding: 30px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #eee;
+}
+
+.form-actions .btn-large {
+  flex: 1;
+}

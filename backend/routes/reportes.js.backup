@@ -1,0 +1,380 @@
+import express from 'express';
+import * as reporteModel from '../models/reporteModel.js';
+
+const router = express.Router();
+
+/**
+ * GET /api/reportes/resumen
+ * Obtener resumen general del sistema
+ */
+router.get('/resumen', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const resumen = await reporteModel.getResumenGeneral(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: resumen,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo resumen:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener resumen general',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/ventas
+ * Reporte de ventas por fecha
+ */
+router.get('/ventas', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const ventas = await reporteModel.getReporteVentas(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: ventas,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de ventas:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de ventas',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/vendedores
+ * Reporte de ventas por vendedor
+ */
+router.get('/vendedores', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const vendedores = await reporteModel.getReporteVentasPorVendedor(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: vendedores,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de vendedores:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de vendedores',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/rifas
+ * Reporte de ventas por rifa
+ */
+router.get('/rifas', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const rifas = await reporteModel.getReporteVentasPorRifa(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: rifas,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de rifas:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de rifas',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/clientes
+ * Reporte de clientes con actividad
+ */
+router.get('/clientes', async (req, res) => {
+  try {
+    const clientes = await reporteModel.getReporteClientes();
+    
+    res.json({
+      success: true,
+      data: clientes
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de clientes:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de clientes',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/numeros-populares
+ * Reporte de números más vendidos
+ */
+router.get('/numeros-populares', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin, limite } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    const limit = parseInt(limite) || 50;
+    
+    const numeros = await reporteModel.getReporteNumerosMasVendidos(inicio, fin, limit);
+    
+    res.json({
+      success: true,
+      data: numeros,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo números populares:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener números populares',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/areas
+ * Reporte de desempeño por áreas
+ */
+router.get('/areas', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const areas = await reporteModel.getReporteAreas(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: areas,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de áreas:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de áreas',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/ganadores
+ * Reporte de ganadores y premios
+ */
+router.get('/ganadores', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const ganadores = await reporteModel.getReporteGanadores(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: ganadores,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de ganadores:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de ganadores',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/cancelaciones
+ * Reporte de ventas canceladas/eliminadas
+ */
+router.get('/cancelaciones', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const cancelaciones = await reporteModel.getReporteVentasCanceladas(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: cancelaciones,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de cancelaciones:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de cancelaciones',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/premios-por-dia
+ * Reporte de premios diarios (pagados y pendientes)
+ */
+router.get('/premios-por-dia', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const premios = await reporteModel.getReportePremiosPorDia(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: premios,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de premios por día:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de premios por día',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/premios-no-pagados
+ * Reporte de premios pendientes de pago
+ */
+router.get('/premios-no-pagados', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const premiosNoPagados = await reporteModel.getReportePremiosNoPagados(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: premiosNoPagados,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo premios no pagados:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener premios no pagados',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/ventas-premios-vendedor-dia
+ * Reporte de ventas y premios por vendedor agrupado por día
+ */
+router.get('/ventas-premios-vendedor-dia', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const reporte = await reporteModel.getReporteVentasPremiosPorVendedorDia(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: reporte,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo reporte de ventas y premios por vendedor/día:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener reporte de ventas y premios por vendedor/día',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/consolidado-mensual
+ * Consolidado mensual de ventas y premios
+ */
+router.get('/consolidado-mensual', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const consolidado = await reporteModel.getConsolidadoMensual(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: consolidado,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo consolidado mensual:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener consolidado mensual',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/reportes/premios-por-vendedor
+ * Reporte consolidado de premios por vendedor
+ */
+router.get('/premios-por-vendedor', async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const inicio = fechaInicio || new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    const fin = fechaFin || new Date().toISOString().split('T')[0];
+    
+    const premios = await reporteModel.getReportePremiosPorVendedor(inicio, fin);
+    
+    res.json({
+      success: true,
+      data: premios,
+      periodo: { fechaInicio: inicio, fechaFin: fin }
+    });
+  } catch (error) {
+    console.error('Error obteniendo premios por vendedor:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener premios por vendedor',
+      error: error.message
+    });
+  }
+});
+
+export default router;

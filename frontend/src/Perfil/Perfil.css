@@ -1,0 +1,278 @@
+.perfil-container {
+  padding-bottom: 40px;
+}
+
+.perfil-container h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #1a1a2e;
+}
+
+.perfil-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 1024px) {
+  .perfil-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #1a1a2e;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.perfil-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.perfil-form .form-control:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.info-readonly {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.info-item .label {
+  font-weight: 600;
+  color: #555;
+}
+
+.info-item .value {
+  color: #333;
+}
+
+/* Saldo y Stats */
+.perfil-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.saldo-card {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.saldo-card h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.saldo-amount {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.saldo-card .btn {
+  background-color: white;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.saldo-card .btn:hover {
+  background-color: #f8f9fa;
+}
+
+.stats-card h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #1a1a2e;
+}
+
+.stat-item {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Actividad Reciente */
+.actividad-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.actividad-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.actividad-item:hover {
+  transform: translateX(5px);
+  background-color: #e9ecef;
+}
+
+.actividad-icono {
+  font-size: 32px;
+  width: 50px;
+  text-align: center;
+}
+
+.actividad-info {
+  flex: 1;
+}
+
+.actividad-titulo {
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 5px;
+}
+
+.actividad-detalle {
+  font-size: 14px;
+  color: #666;
+}
+
+.actividad-fecha {
+  font-size: 13px;
+  color: #999;
+  white-space: nowrap;
+}
+
+/* Password Form */
+.password-form {
+  max-width: 600px;
+}
+
+.password-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Nuevos estilos */
+.loading,
+.error-message {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.loading {
+  color: #667eea;
+}
+
+.error-message {
+  color: #e74c3c;
+  background-color: #ffe6e6;
+  border-radius: 8px;
+}
+
+.alert {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.alert-error {
+  background-color: #ffe6e6;
+  color: #e74c3c;
+  border-left: 4px solid #e74c3c;
+}
+
+.rol-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge.activo {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.inactivo {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.saldo-info {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 15px;
+}
+
+.perfil-foto {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.card-description {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .perfil-form .form-row,
+  .password-form .form-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "rifaparatodos",
+  "version": "1.0.0",
+  "description": "Sistema completo de rifas - Frontend y Backend",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build:frontend": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "rifas",
+    "react",
+    "node",
+    "express"
+  ],
+  "author": "RifaParaTodos",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

@@ -1,0 +1,343 @@
+.mis-premios-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.premios-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.premios-header h1 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.premios-header p {
+  color: #666;
+  font-size: 16px;
+}
+
+/* Resumen */
+.resumen-premios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.resumen-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-left: 4px solid #667eea;
+}
+
+.resumen-card.destacado {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-left-color: #764ba2;
+}
+
+.resumen-icono {
+  font-size: 40px;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.resumen-card.destacado .resumen-icono {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.resumen-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.resumen-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.resumen-card.destacado .resumen-label {
+  color: rgba(255,255,255,0.9);
+}
+
+.resumen-valor {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.resumen-card.destacado .resumen-valor {
+  color: white;
+}
+
+/* Lista de premios */
+.premios-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.premio-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premio-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.premio-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.premio-nivel {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.premio-posicion {
+  background: rgba(255,255,255,0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.premio-contenido {
+  padding: 25px;
+}
+
+.premio-principal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.premio-info {
+  flex: 1;
+}
+
+.premio-rifa {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.premio-detalles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.detalle-item {
+  font-size: 14px;
+  color: #666;
+}
+
+.detalle-item strong {
+  color: #333;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.premio-fechas {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: #999;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.premio-accion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  min-width: 200px;
+}
+
+.premio-monto {
+  text-align: center;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.monto-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.monto-valor {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #28a745;
+}
+
+.btn-cobrar {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-cobrar:hover:not(:disabled) {
+  background: linear-gradient(135deg, #218838 0%, #1fa383 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cobrar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Sin premios */
+.sin-premios {
+  background: white;
+  padding: 60px 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.sin-premios-icono {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.sin-premios h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.sin-premios p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Estados */
+.loading,
+.alert {
+  padding: 40px;
+  text-align: center;
+  border-radius: 12px;
+  margin: 20px 0;
+  background: white;
+}
+
+.loading {
+  color: #667eea;
+  font-size: 18px;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mis-premios-container {
+    padding: 20px 15px;
+  }
+
+  .premios-header h1 {
+    font-size: 24px;
+  }
+
+  .resumen-premios {
+    grid-template-columns: 1fr;
+  }
+
+  .premio-principal {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .premio-accion {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .premio-detalles {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .premio-fechas {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .premio-rifa {
+    font-size: 18px;
+  }
+
+  .monto-valor {
+    font-size: 24px;
+  }
+}

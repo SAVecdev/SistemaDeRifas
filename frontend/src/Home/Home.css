@@ -1,0 +1,399 @@
+.home {
+  padding-bottom: 40px;
+}
+
+/* Header de navegación */
+.home-header {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin-bottom: 0;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-icon {
+  font-size: 2rem;
+}
+
+.logo-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #667eea;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #667eea;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 0.625rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-outline:hover {
+  background: #667eea;
+  color: white;
+}
+
+.hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.hero-subtitle {
+  font-size: 24px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.hero-description {
+  font-size: 18px;
+  max-width: 800px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 15px 40px;
+  font-size: 18px;
+}
+
+.btn-block {
+  width: 100%;
+  text-align: center;
+}
+
+/* Rifas Destacadas */
+.rifas-destacadas {
+  margin-bottom: 50px;
+}
+
+.rifas-destacadas h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #1a1a2e;
+}
+
+.rifa-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rifa-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.rifa-imagen {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.rifa-info {
+  padding: 20px;
+}
+
+.rifa-info h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #1a1a2e;
+}
+
+.rifa-detalles p {
+  margin: 8px 0;
+  color: #555;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+}
+
+.ver-mas {
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* Cómo Funciona */
+.como-funciona {
+  margin-bottom: 50px;
+}
+
+.como-funciona h2 {
+  font-size: 32px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #1a1a2e;
+}
+
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.paso {
+  text-align: center;
+}
+
+.paso-numero {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 auto 15px;
+}
+
+.paso h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #1a1a2e;
+}
+
+.paso p {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Transparencia */
+.transparencia {
+  text-align: center;
+  padding: 40px;
+}
+
+.transparencia h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+.transparencia p {
+  font-size: 18px;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  line-height: 1.8;
+  color: #555;
+}
+
+.caracteristicas {
+  list-style: none;
+  max-width: 600px;
+  margin: 20px auto 0;
+  text-align: left;
+}
+
+.caracteristicas li {
+  font-size: 18px;
+  padding: 10px 0;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 1rem;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .logo-text {
+    font-size: 1.125rem;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .btn-outline,
+  .btn-primary {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .hero-content h1 {
+    font-size: 32px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+  }
+
+  .hero-description {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .header-actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  .hero {
+    padding: 60px 20px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-large {
+    width: 100%;
+  }
+}
+
+/* Mensajes de estado */
+.loading-message,
+.error-message,
+.no-rifas-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.loading-message p {
+  font-size: 1.125rem;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.error-message {
+  border-left: 4px solid #e74c3c;
+}
+
+.error-message p {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.no-rifas-message {
+  border-left: 4px solid #f39c12;
+}
+
+.no-rifas-message p {
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.no-rifas-message p:first-child {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.125rem;
+}
