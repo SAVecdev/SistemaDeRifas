@@ -1,0 +1,29 @@
+# Comandos de Git para subir el proyecto
+
+# Ya ejecutados:
+✅ git init
+✅ git add .
+✅ git commit -m "Initial commit - Sistema completo de rifas con reportes y sesiones"
+
+# SIGUIENTE PASO: Ejecutar estos comandos (reemplaza con tu repositorio):
+
+git remote add origin https://github.com/SAVecdev/actualizacionWeb.git
+git branch -M main
+git push -u origin main
+
+# Si GitHub te pide autenticación:
+# Opción 1: Usar GitHub CLI (gh)
+gh auth login
+
+# Opción 2: Usar Personal Access Token
+# 1. Ve a: https://github.com/settings/tokens
+# 2. Genera un nuevo token con permisos de 'repo'
+# 3. Usa el token como contraseña cuando te lo pida
+
+# Comandos útiles para el futuro:
+git status                    # Ver estado de cambios
+git add .                     # Agregar todos los cambios
+git commit -m "mensaje"       # Crear commit
+git push                      # Subir cambios a GitHub
+git pull                      # Descargar cambios de GitHub
+git log --oneline            # Ver historial de commits
